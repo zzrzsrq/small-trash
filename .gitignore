@@ -1,0 +1,28 @@
+# 构建产物
+target/
+bin/
+obj/
+dist/
+*.exe
+*.pdb
+*.dll
+*.so
+*.dylib
+
+# 依赖与缓存
+node_modules/
+.pnpm-store/
+nuget/
+.cargo/
+*.zip
+
+# 本地与临时
+tmp/
+.archify/
+*_test*.ndjson
+*.log
+
+# 系统
+Thumbs.db
+desktop.ini
+.DS_Store

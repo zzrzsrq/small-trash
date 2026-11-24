@@ -1,0 +1,37 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <AssemblyName>OcrKit</AssemblyName>
+    <RootNamespace>OcrKit</RootNamespace>
+    <ApplicationIcon></ApplicationIcon>
+    <Version>1.0.0</Version>
+    <Product>OcrKit</Product>
+    <Company>zzrzsrq</Company>
+    <Authors>zzrzsrq</Authors>
+    <Copyright>© 2026 zzrzsrq · Apache-2.0</Copyright>
+    <Description>本地中文 OCR 工作台（引擎基于 Sdcb.SimdPaddleOCR / PP-OCRv6，见 THIRD-PARTY-NOTICES）</Description>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <SelfContained>true</SelfContained>
+    <PublishSingleFile>true</PublishSingleFile>
+    <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
+    <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+    <InvariantGlobalization>false</InvariantGlobalization>
+    <SatelliteResourceLanguages>zh-Hans;en</SatelliteResourceLanguages>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Sdcb.SimdPaddleOCR" Version="2.0.0" />
+    <PackageReference Include="Sdcb.SimdPaddleOCR.Models.ChineseV6Tiny" Version="1.0.0" />
+    <PackageReference Include="Sdcb.SimdPaddleOCR.Models.ChineseV6Small" Version="1.0.0" />
+    <PackageReference Include="Sdcb.SimdPaddleOCR.Models.ChineseV6Medium" Version="1.0.0" />
+    <PackageReference Include="Sdcb.SimdPaddleOCR.Models.TextLineOrientation" Version="1.0.0" />
+    <PackageReference Include="Sdcb.SimdCodecs" Version="2.0.0" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,11 @@
+[package]
+name = "ocrkit-shell"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+rfd = "0.18.0"
+serde = { version = "1.0.229", features = ["derive"] }
+serde_json = "1.0.154"
+tao = "0.37.3"
+wry = "0.57.3"

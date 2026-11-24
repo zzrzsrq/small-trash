@@ -1,0 +1,23 @@
+# 字节码
+__pycache__/
+*.py[cod]
+*.egg-info/
+
+# 编辑器
+.vscode/
+.idea/
+*.swp
+*~
+
+# 系统
+.DS_Store
+Thumbs.db
+
+# 测试与临时
+.pytest_cache/
+.coverage
+htmlcov/
+*.log
+
+# 本地账本（如果你把账本放仓库里，取消下面这行）
+# instincts/

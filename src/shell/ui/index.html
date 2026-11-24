@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="porcelain">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self' asset:; img-src 'self' asset: data: blob:; style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src 'self' asset:">
+<title>OcrKit</title>
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <filter id="grain"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2"/>
+      <feColorMatrix values="0 0 0 0 0.50 0 0 0 0 0.50 0 0 0 0 0.50 0 0 0 0.055 0"/></filter>
+  </defs>
+  <symbol id="docArt" viewBox="0 0 1240 1754">
+    <rect width="1240" height="1754" fill="#FFFFFF"/>
+    <text x="150" y="190" font-family="Songti SC, SimSun, serif" font-size="50" fill="#20252A" opacity="0.92">客户合同确认书</text>
+    <rect x="150" y="232" width="940" height="2" fill="#B03A2E" opacity="0.5"/>
+    <g font-family="Songti SC, SimSun, serif" font-size="31" fill="#2C3238" opacity="0.7">
+      <text x="150" y="318">甲方：上海晨曦科技有限公司</text>
+      <text x="150" y="388">乙方：杭州云润贸易有限公司</text>
+      <text x="150" y="458">项目名称：智能办公系统升级</text>
+      <text x="150" y="528">合同金额：人民币 180,000 元</text>
+      <text x="150" y="598">交付日期：2026 年 6 月 30 日</text>
+      <text x="150" y="668">签署地点：上海市浦东新区</text>
+      <text x="150" y="738">签字栏：————————————</text>
+    </g>
+    <g fill="#20252A" opacity="0.26">
+      <rect x="150" y="812" width="880" height="8"/><rect x="150" y="848" width="840" height="8"/>
+      <rect x="150" y="884" width="900" height="8"/><rect x="150" y="920" width="720" height="8"/>
+      <rect x="150" y="956" width="870" height="8"/><rect x="150" y="992" width="800" height="8"/>
+      <rect x="150" y="1028" width="890" height="8"/><rect x="150" y="1064" width="660" height="8"/>
+      <rect x="150" y="1100" width="860" height="8"/><rect x="150" y="1136" width="760" height="8"/>
+      <rect x="150" y="1172" width="820" height="8"/><rect x="150" y="1208" width="700" height="8"/>
+    </g>
+    <rect x="950" y="1230" width="140" height="140" fill="none" stroke="#B03A2E" stroke-width="4" opacity="0.5"/>
+    <text x="1020" y="1312" font-family="Songti SC, SimSun, serif" font-size="38" fill="#B03A2E" opacity="0.7" text-anchor="middle">验讫</text>
+  </symbol>
+</svg>
+
+<div class="titlebar" id="titlebar">
+  <div class="brand"><span class="seal">识</span><b>OcrKit</b><span class="tag">本地识别</span></div>
+  <nav class="menu">
+    <span>文件</span><span>编辑</span><span id="m-view">视图</span><span>帮助</span><span>关于</span>
+  </nav>
+  <div class="grow"></div>
+  <div class="wctl">
+    <button id="w-min" title="最小化">–</button>
+    <button id="w-max" title="最大化">▢</button>
+    <button id="w-close" class="close" title="关闭">✕</button>
+  </div>
+</div>
+
+<div class="stage">
+  <aside class="rail">
+    <div class="import" id="drop-zone">
+      <span class="plus">+</span><b>拖入图片或文件夹</b><br>批量导入后可按来源分组
+    </div>
+    <div class="quick">
+      <a id="pick-files">选择文件</a><a id="pick-folder">整个文件夹</a>
+    </div>
+
+    <div class="gh"><span>分组</span><button id="new-group" class="mini" title="新建分组">＋</button></div>
+    <div class="groups" id="groups"></div>
+
+    <div class="grow-line"></div>
+    <div class="gh"><span id="list-title">全部文件</span><span class="cnt" id="list-count">0</span></div>
+    <div class="files" id="files"></div>
+  </aside>
+
+  <main class="canvas" id="canvas">
+    <div class="sheet blank" id="sheet">
+      <svg class="scan" viewBox="0 0 1240 1754" preserveAspectRatio="none">
+        <use href="#docArt" id="art"/>
+        <rect class="grain" width="1240" height="1754" filter="url(#grain)"/>
+        <image id="scan-img" x="0" y="0" width="1240" height="1754" preserveAspectRatio="xMidYMid meet" style="display:none"/>
+      </svg>
+      <div class="reveal" id="reveal"><div class="tp" id="textpage"><p class="ph">等待识别…</p></div></div>
+      <div class="sweep"></div>
+      <div class="edge"></div>
+      <div class="boxes" id="boxes"></div>
+    </div>
+    <div class="cap" id="cap">拖入图片或文件夹开始</div>
+    <div class="zoombar">
+      <div class="viewbar" id="viewbar">
+        <button id="view-original" class="on">原图</button><button id="view-text">文本</button>
+      </div>
+      <button id="theme-btn" class="mini" style="margin-left:10px">暗色</button>
+      <span style="margin-left:10px">适合窗口</span>
+    </div>
+  </main>
+
+  <aside class="out">
+    <div class="out-head">
+      <div class="out-title">输出 <em id="out-file">—</em></div>
+      <div class="out-sub" id="out-sub">识别完成后生成本文档</div>
+    </div>
+    <div class="page-wrap">
+      <div class="page">
+        <div class="page-hd"><span id="pg-src">—</span><span id="pg-range"></span></div>
+        <div class="page-body" id="pg-body"><p class="empty">还没有结果</p></div>
+        <div class="page-ft"><span>本地识别 · 不上传</span><span id="pg-no">— / —</span></div>
+      </div>
+    </div>
+    <div class="pager">
+      <button id="pg-prev" class="nav" title="上一页">‹</button>
+      <span class="pg-count"><b id="pg-cur">0</b> / <span id="pg-total">0</span></span>
+      <button id="pg-next" class="nav" title="下一页">›</button>
+      <div class="grow"></div>
+      <button id="btn-export" class="primary">导出…</button>
+    </div>
+  </aside>
+</div>
+
+<div class="menu-pop" id="group-menu" hidden></div>
+
+<div class="modal" id="export-modal" hidden>
+  <div class="modal-card">
+    <h2>导出</h2>
+    <div class="row"><label>格式</label>
+      <div class="chips" data-field="format">
+        <button class="chip on" data-v="txt">纯文本 .txt</button>
+        <button class="chip" data-v="md">Markdown .md</button>
+        <button class="chip" data-v="json">JSON（含坐标）</button>
+      </div>
+    </div>
+    <div class="row"><label>结构</label>
+      <div class="chips" data-field="layout">
+        <button class="chip on" data-v="sections">每文件一节 · 带标题</button>
+        <button class="chip" data-v="toc">再生成目录</button>
+        <button class="chip" data-v="plain">纯正文连排</button>
+      </div>
+    </div>
+    <div class="row"><label>分页</label>
+      <div class="chips" data-field="paging">
+        <button class="chip on" data-v="pagebreak">每节前分页</button>
+        <button class="chip" data-v="none">不分页</button>
+      </div>
+    </div>
+    <div class="row"><label>范围</label>
+      <div class="chips" data-field="scope">
+        <button class="chip on" data-v="all">全部</button>
+        <button class="chip" data-v="group">当前分组</button>
+        <button class="chip" data-v="file">当前文件</button>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button id="export-cancel" class="ghost">取消</button>
+      <button id="export-ok" class="primary">选择目录并导出</button>
+    </div>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
