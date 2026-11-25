@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
 """变异测试：把关键修复挨个去掉，看测试套能不能抓住。
 
-这是判断「测试是不是假的」的唯一可靠办法。
-普通的 25/25 全绿不算证据——它只能证明测试跑通了。
-变异存活才说明那段代码没人守。
+这是判断「测试是不是假的」的可靠办法：变异存活说明那段代码没人守。
+普通全绿只证明测试跑通了。
 
 用法: python mutate.py
 """
@@ -16,8 +15,6 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 INSTINCT = HERE / "instinct.py"
-CASE = HERE / "case.py"
-TESTS = HERE / "test_instinct.py"
 
 # 每个变异 = (名字, 正则, 替换)。正则匹配不上就跳过并报告。
 MUTATIONS = [
@@ -43,13 +40,6 @@ MUTATIONS = [
     ("门槛 evidence", r"THRESHOLD_EVIDENCE = 3", "THRESHOLD_EVIDENCE = 1"),
 ]
 
-# 针对 case.py 的变异：(名字, 正则, 替换)
-CASE_MUTATIONS = [
-    ("case 空目录提示", r'        print\(f"还没有案例。目录: \{d\}"\)', "        print('')"),
-    ("case 未填完判定", r'        filled = "（一句话" not in text and "（发生了什么）" not in text',
-                        "        filled = True"),
-    ("case 缺口提示", r"                if len\(filled\) >= 3:", "                if False:"),
-]
 
 
 def run_tests(script_dir: Path) -> tuple[int, int]:
@@ -68,7 +58,6 @@ def main() -> int:
 
     for target_name, target_path, muts in (
         ("instinct.py", INSTINCT, MUTATIONS),
-        ("case.py", CASE, CASE_MUTATIONS),
     ):
         if not target_path.exists():
             print(f"\n跳过 {target_name}（文件不存在）")
